@@ -1,24 +1,24 @@
-import { Component } from '@angular/core';
-import { DUMMY_USERS } from '../dummy-user';
-
-const randomNumber = Math.floor(Math.random() * DUMMY_USERS.length);
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { IUser } from './user.model';
+import { CardComponent } from "../shared/card/card.component";
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [],
+  imports: [CardComponent],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css',
 })
 export class UserComponent {
-  selectedUser = DUMMY_USERS[randomNumber];
+  @Input({ required: true }) user!: IUser;
+  @Input({ required: true }) selected!: boolean;
+  @Output() select = new EventEmitter();
 
   get imagePath() {
-    return 'assets/users/' + this.selectedUser.avatar;
+    return 'assets/users/' + this.user.avatar;
   }
 
   onSelectedUser() {
-    const randomNumber = Math.floor(Math.random() * DUMMY_USERS.length);
-    this.selectedUser = DUMMY_USERS[randomNumber];
+    this.select.emit(this.user.id);
   }
 }
